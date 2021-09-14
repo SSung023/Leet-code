@@ -1,0 +1,35 @@
+class Solution {
+public:
+    struct compare{
+        bool operator()(pair<int, string> &a, pair<int, string> &b){
+            if(a.first == b.first){ // 빈도가 같을 때에는 string 사전순으로
+                return a.second > b.second;
+            }
+            else{ // 빈도가 다를 때에는 빈도순으로
+                return a.first < b.first;
+            }
+        }
+    };
+
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        vector<string> result;
+        priority_queue<pair<int, string>, vector<pair<int, string>>, compare> pq; // first:frequency, second: word
+        sort(words.begin(), words.end());
+
+        for(int i = 0; i < words.size();){
+            string tmp = words[i];
+            auto iter_upper = upper_bound(words.begin() + i, words.end(), tmp);
+            auto iter_lower = lower_bound(words.begin() + i, words.end(), tmp);
+
+            int count = iter_upper - iter_lower;
+            i += count;
+            pq.push(make_pair(count, tmp));
+        }
+
+        for(int i = 0; i < k; i++){
+            result.push_back(pq.top().second);
+            pq.pop();
+        }
+        return result;
+    }
+};
