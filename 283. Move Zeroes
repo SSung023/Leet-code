@@ -1,0 +1,31 @@
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int len = nums.size();
+        if(len == 1)    return;
+        
+        int left = 0, right = 1;
+        while(true){
+            if(right >= len)    break;
+            
+            if(!nums[left] && !nums[right]){ // 둘 다 0일 때
+                right++;
+                continue;
+            }
+            
+            if(!nums[left] && nums[right]){ // left 값만 0일 때
+                swap(nums[left], nums[right]);
+            }
+            left++;
+            right++;
+        }
+    }
+};
+
+/// Lambda & STL(stable_partition) Ver
+class Solution {
+public: 
+    void moveZeroes(vector<int>& nums) {
+        stable_partition(begin(nums), end(nums), [](int i){ return i;});
+    }
+};
