@@ -1,0 +1,51 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:
+    unordered_map<int, int> hashmap;
+    int max_freq = 0;
+    
+public:
+    void getSubtreeSum(TreeNode*cur, int& sum){
+        if(!cur)    return;
+        sum += cur->val;
+        
+        getSubtreeSum(cur->left, sum);
+        getSubtreeSum(cur->right, sum);
+    }
+    
+    void checkNode(TreeNode* cur){
+        if(!cur)   return;
+        
+        int value = 0;
+        getSubtreeSum(cur, value);
+        hashmap[value]++;
+        max_freq = max(max_freq, hashmap[value]);
+        
+        checkNode(cur->left);
+        checkNode(cur->right);
+    }
+    
+    vector<int> findFrequentTreeSum(TreeNode* root) {
+        vector<int> result;
+        
+        checkNode(root);
+        
+        for(auto iter = hashmap.begin(); iter != hashmap.end(); iter++){
+            if(iter->second == max_freq){
+                result.emplace_back(iter->first);
+            }
+        }
+        
+        return result;
+    }
+};
