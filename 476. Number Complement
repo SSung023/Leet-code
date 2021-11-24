@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int findComplement(int num) {
+        int tmp = num;
+        int i = 1;
+        while(tmp != 0){
+            tmp >>= 1;
+            num ^= i;
+            i <<= 1;
+        }
+        return num;
+    }
+};
